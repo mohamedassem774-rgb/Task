@@ -1,0 +1,13 @@
+---
+ansible-navigator:
+  execution-environment:
+    image: quay.io/anwarfouad/ansible
+    pull:
+      policy: missing
+
+  playbook-artifact:
+    enable: false
+
+  mode: stdout
+
+ 

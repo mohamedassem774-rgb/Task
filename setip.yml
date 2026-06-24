@@ -1,0 +1,8 @@
+---
+    - name: T4 configure interface settings
+      cisco.ios.ios_config:
+        lines:
+        - description test interface
+        - ip address {{IP}} 255.255.255.0
+        parents: interface GigabitEthernet2
+      notify: "T5 up"

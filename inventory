@@ -1,0 +1,29 @@
+172.25.250.9  #worstation
+
+192.168.1.50  #windows15
+
+
+[myrouters]
+iosxe1   IP2=192.168.3.1
+iosxe2   IP2=192.168.3.2
+#iosxe3
+#iosxe4
+#iosxe5
+
+[myrouters:vars]
+ansible_user=student
+
+ansible_ssh_private_key_file=~/.ssh/lab_rsa
+
+ansible_connection=ansible.netcommon.network_cli
+
+ansible_network_os=cisco.ios.ios
+
+
+[myjunos]
+junos1vm
+junos2vm
+
+[nti:children]
+myrouters
+myjunos

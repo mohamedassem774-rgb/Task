@@ -1,0 +1,62 @@
+---
+- name: playbook01 medo tasks
+  hosts: myrouters
+  gather_facts: yes
+  vars:
+    U: admin1
+    IP: "{{IP2}}"
+    B: "MCIT"
+    H: "{{inventory_hostname}}"
+  tasks:
+    - name: T1 task01 doooooooo print facts
+      debug:
+        var: ansible_facts
+
+
+    - name: T2 create a new user
+      cisco.ios.ios_user:
+        name: "{{U}}"
+        nopassword: true
+        sshkey: "{{ lookup('file', '~/.ssh/lab_rsa.pub') }}"
+        state: present  
+        privilege: 15
+      notify: "T3 banner"
+
+
+
+
+
+    - name: T4 configure interface settings
+      cisco.ios.ios_config:
+        lines:
+        - description test interface
+        - ip address {{IP}} 255.255.255.0
+        parents: interface GigabitEthernet2
+      notify: "T5 up"
+
+
+    - name: T6 Apply the provided configuration
+      cisco.ios.ios_hostname:
+        config:
+          hostname: "{{H}}"
+        state: merged
+
+
+
+  handlers:
+    - name: "T3 banner"
+      cisco.ios.ios_banner:
+        banner: login
+        text: |
+          this is {{inventory_hostname}} login banner
+          that contains a multiline
+          string
+        state: present
+
+    - name: "T5 up"
+      cisco.ios.ios_interfaces:
+        config:
+        - name: GigabitEthernet2
+          enabled: true
+
+

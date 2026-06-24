@@ -1,0 +1,9 @@
+---
+    - name: T2.2 create a new user
+      cisco.ios.ios_user:
+        name: "{{U}}"
+        nopassword: true
+        sshkey: "{{ lookup('file', '~/.ssh/lab_rsa.pub') }}"
+        state: present  
+        privilege: 15
+      notify: "T3 banner"
