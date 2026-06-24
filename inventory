@@ -4,8 +4,8 @@
 
 
 [myrouters]
-iosxe1
-iosxe2
+iosxe1   IP2=192.168.3.1
+iosxe2   IP2=192.168.3.2
 #iosxe3
 #iosxe4
 #iosxe5
