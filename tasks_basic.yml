@@ -1,46 +1,42 @@
 ---
 - name: playbook01 medo tasks
   hosts: myrouters
-  connection: network_cli
-  remote_user: student
   gather_facts: yes
+  vars:
+    U: admin1
+    IP: "{{IP2}}"
+    B: "MCIT"
+    H: "{{inventory_hostname}}"
   tasks:
-    - name: task01 doooooooo print facts
+    - name: T1 task01 doooooooo print facts
       debug:
         var: ansible_facts
 
 
-    - name: create a new user
+    - name: T2 create a new user
       cisco.ios.ios_user:
-        name: medo
+        name: "{{U}}"
         nopassword: true
         sshkey: "{{ lookup('file', '~/.ssh/lab_rsa.pub') }}"
         state: present  
         privilege: 15
+      notify: "T3 banner"
 
 
 
-    - name: Configure the login banner
-      cisco.ios.ios_banner:
-        banner: login
-        text: |
-          this is NTI login banner
-          that contains a multiline
-          string
-        state: present
 
 
-    - name: configure interface settings
+    - name: T4 configure interface settings
       cisco.ios.ios_config:
         lines:
         - description test interface
-        - ip address 172.31.1.1 255.255.255.0
+        - ip address {{IP}} 255.255.255.0
         parents: interface GigabitEthernet2
+      notify: "T5 up"
 
-    - name: Merge provided configuration with device configuration
-      cisco.ios.ios_interfaces:
+
+    - name: T6 Apply the provided configuration
+      cisco.ios.ios_hostname:
         config:
-        - name: GigabitEthernet2
-          enabled: true
-
-
+          hostname: "{{H}}"
+        state: merged
